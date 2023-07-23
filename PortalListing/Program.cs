@@ -1,8 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using PortalListing.Data;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+var connectionString = builder.Configuration.GetConnectionString("PortalListingDbConnectionString"); // Add connection string
+builder.Services.AddDbContext<PortalListingDbContext>(options =>
+{
+    options.UseSqlServer(connectionString);
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
