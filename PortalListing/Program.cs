@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using PortalListing.Configurations;
+using PortalListing.Contracts;
 using PortalListing.Data;
+using PortalListing.Repository;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +16,11 @@ builder.Services.AddDbContext<PortalListingDbContext>(options =>
 });
 
 builder.Services.AddControllers();
+
+//Add repositories
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>)); // Generic Repositories
+builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -26,6 +34,8 @@ builder.Services.AddCors(options =>
 // use serilog to log to app console
 
 builder.Host.UseSerilog((ctx, logger) => logger.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
+
+builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 var app = builder.Build();
 
