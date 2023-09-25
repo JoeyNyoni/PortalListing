@@ -8,6 +8,6 @@ namespace PortalListing.Models.Country
         public string Name { get; set; }
         public string ShortName { get; set; }
 
-        public List<HotelDTO> Hotels { get; set; }
+        public List<HotelDto> Hotels { get; set; }
     }
 }
