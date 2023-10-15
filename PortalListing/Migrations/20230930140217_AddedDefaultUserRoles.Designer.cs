@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PortalListing.Data;
 
@@ -11,9 +12,11 @@ using PortalListing.Data;
 namespace PortalListing.Migrations
 {
     [DbContext(typeof(PortalListingDbContext))]
-    partial class PortalListingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230930140217_AddedDefaultUserRoles")]
+    partial class AddedDefaultUserRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

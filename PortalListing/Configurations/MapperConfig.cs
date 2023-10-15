@@ -2,6 +2,7 @@
 using PortalListing.Data;
 using PortalListing.Models.Country;
 using PortalListing.Models.Hotel;
+using PortalListing.Models.Users;
 
 namespace PortalListing.Configurations
 {
@@ -18,6 +19,8 @@ namespace PortalListing.Configurations
             CreateMap<Hotel, HotelDto>().ReverseMap();
             CreateMap<Hotel, CreateHotelDto>().ReverseMap();
             CreateMap<Hotel, UpdateHotelDto>().ReverseMap();
+
+            CreateMap<ApiUser, ApiUserDto>().ReverseMap();
         }
     }
 }
