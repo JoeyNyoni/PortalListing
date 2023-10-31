@@ -10,10 +10,12 @@ namespace PortalListing.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly IAuthManager _authManager;
-        
-        public AccountsController(IAuthManager authManager)
+        private readonly ILogger<AccountsController> _logger;
+
+        public AccountsController(IAuthManager authManager, ILogger<AccountsController> logger)
         {
             this._authManager = authManager;
+            this._logger = logger;
         }
 
         // POST: api/Accounts/Register
@@ -24,8 +26,10 @@ namespace PortalListing.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> Register([FromBody] ApiUserDto apiUserDto)
         {
+            _logger.LogInformation($"Registration attempt for {apiUserDto.Email}");
+
             var errors = await _authManager.Register(apiUserDto);
-            
+
             if (errors.Any())
             {
                 foreach (var error in errors)
@@ -46,6 +50,8 @@ namespace PortalListing.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> Login([FromBody] LoginDto loginDto)
         {
+            _logger.LogInformation($"Registration attempt for {loginDto.Email}");
+
             var authResponse = await _authManager.Login(loginDto);
 
             if (authResponse == null)

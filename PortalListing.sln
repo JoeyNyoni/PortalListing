@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortalListing", "PortalListing\PortalListing.csproj", "{66918D33-DABF-4617-A9F3-A3EAD96E2F78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelListingMinimal", "HotelListingMinimal\HotelListingMinimal.csproj", "{49D53298-D01A-4294-9E1F-287B066FC3EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelListingMinimal", "HotelListingMinimal\HotelListingMinimal.csproj", "{49D53298-D01A-4294-9E1F-287B066FC3EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

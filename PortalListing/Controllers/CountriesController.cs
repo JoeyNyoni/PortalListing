@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PortalListing.Contracts;
 using PortalListing.Data;
+using PortalListing.Exceptions;
+using PortalListing.Models;
 using PortalListing.Models.Country;
 using PortalListing.Repository;
 
@@ -20,20 +22,30 @@ namespace PortalListing.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ICountriesRepository _countriesRepository;
+        private readonly ILogger<CountriesController> _logger;
 
-        public CountriesController(IMapper mapper, ICountriesRepository countriesRepository)
+        public CountriesController(IMapper mapper, ICountriesRepository countriesRepository, ILogger<CountriesController> logger)
         {
             this._mapper = mapper;
             this._countriesRepository = countriesRepository;
+            this._logger = logger;
         }
 
         // GET: api/Countries
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<Country>>> GetCountries()
         {
             var countries = await _countriesRepository.GetAllAsync();
             var records = _mapper.Map<List<GetCountryDTO>>(countries);
             return Ok(records);
+        }
+
+        // GET: api/Countries/?StartIndex=0&pageSize=25&pageNumber=1
+        [HttpGet]
+        public async Task<ActionResult<PagedResult<GetCountryDTO>>> GetPagedCountries([FromQuery] QueryParameters queryParameters)
+        {
+            var pagedResult = await _countriesRepository.GetAllAsync<GetCountryDTO>(queryParameters);
+            return Ok(pagedResult);
         }
 
         // GET: api/Countries/5
@@ -44,7 +56,7 @@ namespace PortalListing.Controllers
 
             if (country == null)
             {
-                return NotFound();
+                throw new NotFoundException(nameof(GetCountry), id);
             }
 
             var countryDTO = _mapper.Map<CountryDTO>(country);
@@ -67,7 +79,7 @@ namespace PortalListing.Controllers
 
             if (country == null)
             {
-                return NotFound();
+                throw new NotFoundException(nameof(GetCountry), id);
             }
 
             _mapper.Map(updateCountryDto, country);
@@ -113,7 +125,7 @@ namespace PortalListing.Controllers
  
             if (country == null)
             {
-                return NotFound();
+                throw new NotFoundException(nameof(GetCountry), id);
             }
 
             await _countriesRepository.DeleteAsync(id);

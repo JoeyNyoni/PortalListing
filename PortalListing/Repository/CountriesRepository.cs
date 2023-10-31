@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PortalListing.Contracts;
 using PortalListing.Data;
 
@@ -8,7 +9,7 @@ namespace PortalListing.Repository
     {
         private readonly PortalListingDbContext _context;
 
-        public CountriesRepository(PortalListingDbContext context) : base(context)
+        public CountriesRepository(PortalListingDbContext context, IMapper mapper) : base(context, mapper)
         {
             this._context = context;
         }

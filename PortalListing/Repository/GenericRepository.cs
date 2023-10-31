@@ -1,16 +1,21 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using PortalListing.Contracts;
 using PortalListing.Data;
+using PortalListing.Models;
 
 namespace PortalListing.Repository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         private readonly PortalListingDbContext _context;
+        private readonly IMapper _mapper;
 
-        public GenericRepository(PortalListingDbContext context)
+        public GenericRepository(PortalListingDbContext context, IMapper mapper)
         {
             this._context = context;
+            this._mapper = mapper;
         }
 
         public async Task<T> AddAsync(T entity)
@@ -37,6 +42,25 @@ namespace PortalListing.Repository
         {
             // "Set" keyword: refer to DbContext
             return await _context.Set<T>().ToListAsync();
+        }
+
+        // paging
+        public async Task<PagedResult<TResult>> GetAllAsync<TResult>(QueryParameters queryParameters)
+        {
+            var totalSize = await _context.Set<T>().CountAsync();
+            var items = await _context.Set<T>()
+                .Skip(queryParameters.StartIndex)
+                .Take(queryParameters.PageSize)
+                .ProjectTo<TResult>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return new PagedResult<TResult>
+            {
+                Items = items,
+                PageNumber = queryParameters.StartIndex,
+                RecordNumber = queryParameters.PageSize,
+                TotalCount = totalSize
+            };
         }
 
         public async Task<T> GetAsync(int? id)

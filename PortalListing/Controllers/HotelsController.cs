@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PortalListing.Contracts;
 using PortalListing.Data;
+using PortalListing.Models;
 using PortalListing.Models.Hotel;
 
 namespace PortalListing.Controllers
@@ -28,11 +29,18 @@ namespace PortalListing.Controllers
         }
 
         // GET: api/Hotels
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<HotelDto>>> GetHotels()
         {
             var hotels = await _hotelsRepository.GetAllAsync();
             return Ok(_mapper.Map<List<HotelDto>>(hotels));
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<PagedResult<HotelDto>>> GetPagedHotels([FromQuery] QueryParameters queryParameters)
+        {
+            var pagedHotels = await _hotelsRepository.GetAllAsync<HotelDto>(queryParameters);
+            return Ok(pagedHotels);
         }
 
         // GET: api/Hotels/5
